@@ -1,0 +1,90 @@
+<nav class="navbar navbar-expand-md navbar-dark pt-md-0 pb-md-0">
+	<div>
+		<button class="navbar-toggler pt-2 pb-2 mr-2" type="button" (click)="isMenuCollapsed = !isMenuCollapsed" aria-controls="menu" [attr.aria-expanded]="!isMenuCollapsed" aria-label="Abrir menu">
+			<fa-icon [icon]="faBars"></fa-icon>
+		</button>
+
+		<a class="navbar-brand" title="eBooks a Venda" [routerLink]="['/']">
+			<fa-icon class="mr-2" [icon]="faBookReader"></fa-icon>
+			<span>Loja de eBooks</span>
+		</a>
+	</div>
+
+	<div class="navbar-collapse justify-content-between" id="menu" [collapse]="isMenuCollapsed" [isAnimated]="true">
+		<ul class="navbar-nav me-auto mb-0 d-sm-flex" *ngIf="!restrictedArea">
+			<li class="nav-item">
+				<a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/home']">
+					<fa-icon class="mr-2 d-inline-block d-md-inline" [icon]="faBook" title="eBooks a Venda"></fa-icon>
+					<span>eBooks a Venda</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/minhasCompras']">
+					<fa-icon class="mr-2 d-inline-block d-md-inline" [icon]="faShoppingBag" title="Minhas Compras"></fa-icon>
+					<span>Minhas Compras</span>
+				</a>
+			</li>
+		</ul>
+
+		<ul class="navbar-nav me-auto mb-0 d-sm-flex" *ngIf="restrictedArea">
+			<li class="nav-item">
+				<a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/autores']">
+					<fa-icon class="mr-2 d-inline-block d-md-inline" [icon]="faUserEdit" title="Autores"></fa-icon>
+					<span>Autores</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/ebooks']">
+					<fa-icon class="mr-2 d-inline-block d-md-inline" [icon]="faBook" title="eBooks"></fa-icon>
+					<span>eBooks</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/funcionarios']">
+					<fa-icon class="mr-2 d-inline-block d-md-inline" [icon]="faUsers" title="Funcionários"></fa-icon>
+					<span>Funcionários</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/generos']">
+					<fa-icon class="mr-2 d-inline-block d-md-inline" [icon]="faBookOpen" title="Gêneros"></fa-icon>
+					<span>Gêneros</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" [routerLinkActive]="'active'" [routerLink]="['/vendas']">
+					<fa-icon class="mr-2 d-inline-block d-md-inline" [icon]="faSearchDollar" title="Vendas"></fa-icon>
+					<span>Vendas</span>
+				</a>
+			</li>
+		</ul>
+
+		<ul class="navbar-nav mb-0 flex-row" *ngIf="isLoggedIn">
+			<li class="nav-item" *ngIf="!restrictedArea && isEmployee">
+				<a class="nav-link active" title="Acessar Área Restrita" [routerLink]="['/autores']">
+					<fa-icon class="mr-2" [icon]="faTools"></fa-icon>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link active" title="Meu Perfil" [routerLink]="['/perfil']">
+					<fa-icon class="mr-2" [icon]="faUserCircle"></fa-icon>
+					<span>{{ username }}</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link active" title="Sair" href="javascript:void(0)" (click)="logout()">
+					<fa-icon class="logout-icon pl-2" [icon]="faSignOutAlt"></fa-icon>
+				</a>
+			</li>
+		</ul>
+
+		<ul class="navbar-nav mb-0 flex-row" *ngIf="!isLoggedIn">
+			<li class="nav-item">
+				<a class="nav-link active user pr-2" title="Entrar" [routerLink]="['/login']">
+					<span>Entrar</span>
+					<fa-icon class="logout-icon pl-2" [icon]="faSignInAlt"></fa-icon>
+				</a>
+			</li>
+		</ul>
+	</div>
+</nav>

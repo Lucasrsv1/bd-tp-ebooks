@@ -1,0 +1,139 @@
+/* Global style file */
+@use "sass:math";
+
+@import "./palette.scss";
+
+$primary: #29506D;
+$secondary: #277553;
+$dark: #6C757D;
+
+:root {
+	--primary: $primary;
+	--secondary: $secondary;
+	--dark: $dark;
+}
+
+$custom-control-indicator-size: 1.13rem;
+$custom-control-indicator-border-width: 1px;
+$custom-switch-width: $custom-control-indicator-size * 2.15;
+$custom-switch-indicator-border-radius: math.div($custom-control-indicator-size, 2);
+$custom-switch-indicator-size: subtract(
+	$custom-control-indicator-size,
+	$custom-control-indicator-border-width * 4
+);
+
+/* Importa o Bootstrap. */
+@import "~bootstrap/scss/bootstrap";
+
+/* Importa o DatePicker. */
+@import "~ngx-bootstrap/datepicker/bs-datepicker";
+
+/* Importa o NgSelect */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+/* Importa o DataTables */
+@import "~datatables.net-bs4/css/dataTables.bootstrap4.min.css";
+
+body {
+	background: #6C757D;
+}
+
+/* === Toggle/Switch === */
+
+.custom-switch .custom-control-label::before {
+	height: 1.37rem;
+}
+
+.custom-control-input:checked ~ .custom-control-label::after {
+	margin-left: -3px;
+}
+
+/* === Block UI === */
+
+div.block-ui-wrapper {
+	background-color: rgba(0, 0, 0, 0.5);
+
+	.loader {
+		border-color: #FFF;
+		border-left-color: var(--color-primary-0);
+	}
+}
+
+div.block-ui-spinner .message {
+	color: #FFF;
+}
+
+/* === NgSelect === */
+
+.ng-select.ng-select-single .ng-select-container {
+	height: 38px;
+}
+
+.form-field.is-invalid .ng-select-container, .form-field.is-invalid>span>input {
+	border-color: #dc3545 !important;
+	padding-right: calc(.75em + .75rem);
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23dc3545' viewBox='-2 -2 7 7'%3e%3cpath stroke='%23dc3545' d='M0 0l3 3m0-3L0 3'/%3e%3ccircle r='.5'/%3e%3ccircle cx='3' r='.5'/%3e%3ccircle cy='3' r='.5'/%3e%3ccircle cx='3' cy='3' r='.5'/%3e%3c/svg%3E");
+	background-repeat: no-repeat;
+	background-position: center right calc(.375em + .1875rem);
+	background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+
+.form-field.is-invalid .ng-select-container:focus, .form-field.is-invalid.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container, .form-field.is-invalid>span>input:focus {
+	border-color: #dc3545;
+	box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, .25) !important;
+}
+
+.form-field.is-invalid~.invalid-feedback {
+	display: block;
+}
+
+.form-field.is-valid .ng-select-container, .form-field.is-valid>span>input {
+	border-color: #28a745 !important;
+	padding-right: calc(.75em + .75rem);
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+	background-repeat: no-repeat;
+	background-position: center right calc(.375em + .1875rem);
+	background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+
+.form-field.is-valid .ng-select-container:focus, .form-field.is-valid.ng-select.ng-select-focused:not(.ng-select-opened)>.ng-select-container, .form-field.is-valid>span>input:focus {
+	border-color: #28a745;
+	box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, .25) !important;
+}
+
+/* === DataTables === */
+
+table.dataTable.table-bordered thead th, table.dataTable.table-bordered thead td, table.dataTable.table-bordered.no-footer {
+	border-bottom: 1px solid #dee2e6;
+}
+
+table.dataTable thead th, table.dataTable thead td {
+	padding: 10px 18px;
+}
+
+table.dataTable tbody th, table.dataTable tbody td {
+	padding: 8px 10px;
+}
+
+table.dataTable tfoot th, table.dataTable tfoot td {
+	border-top: 1px solid #dee2e6;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td, .table-striped>tbody>tr:nth-child(odd)>th {
+	background-color: white;
+}
+
+.table-striped>tbody>tr:nth-child(even)>td, .table-striped>tbody>tr:nth-child(even)>th, .table-striped>thead>tr {
+	background-color: rgba(0, 0, 0, .05);
+}
+
+table.dataTable {
+	border-top: 0;
+	min-width: 0;
+	width: 100%;
+}
+
+.dataTables_wrapper > .row {
+	margin-left: 0;
+	margin-right: 0;
+}

@@ -1,0 +1,44 @@
+<div class="container pt-3 pb-3">
+	<div class="card p-3">
+		<div class="d-flex flex-row justify-content-between align-items-center mb-3 pl-3 pr-3">
+			<h1 class="text-primary">Autores</h1>
+			<div>
+				<button class="btn btn-primary" (click)="create()" title="Adicionar">
+					<fa-icon [icon]="faPlus"></fa-icon>
+					Novo Autor
+				</button>
+			</div>
+		</div>
+
+		<div class="w-100 overflow-auto pb-2">
+			<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Nome</th>
+						<th>Quantidade de eBooks</th>
+						<th class="actions text-center">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let author of authors">
+						<td>{{ author.idAutor }}</td>
+						<td>{{ author.nome }}</td>
+						<td>{{ author.titulos.length }}</td>
+						<td class="text-center">
+							<button class="btn btn-sm btn-primary" (click)="listBooks(author)" title="Lista de eBooks">
+								<fa-icon [icon]="faBook"></fa-icon>
+							</button>
+							<button class="btn btn-sm btn-primary ml-2" (click)="edit(author)" title="Editar">
+								<fa-icon [icon]="faPencilAlt"></fa-icon>
+							</button>
+							<button class="btn btn-sm btn-danger ml-2" (click)="remove(author)" title="Excluir">
+								<fa-icon [icon]="faTrashAlt"></fa-icon>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

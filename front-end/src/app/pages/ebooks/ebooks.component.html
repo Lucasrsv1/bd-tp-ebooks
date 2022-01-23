@@ -1,0 +1,140 @@
+<div class="container pt-3 pb-3">
+	<div class="card p-3">
+		<div class="d-flex flex-row justify-content-between align-items-center mb-3 pl-3 pr-3">
+			<h1 class="text-primary">eBooks</h1>
+			<div>
+				<button class="btn btn-primary" (click)="create()" title="Adicionar">
+					<fa-icon [icon]="faPlus"></fa-icon>
+					Novo eBook
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal de Adição/Edição -->
+<ng-template #modal>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">{{ editando ? "Editar" : "Adicionar" }} eBook</h4>
+		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<div class="modal-body">
+		<form [formGroup]="form" (ngSubmit)="save()">
+			<div class="text-left">
+				<div class="form-row">
+					<div class="form-group col-12 col-sm-6">
+						<label for="titulo">Título:</label>
+						<app-visual-validator [config]="validations" field="titulo">
+							<input
+								id="titulo"
+								type="text"
+								class="form-control"
+								formControlName="titulo"
+								placeholder="Digite o título do eBook"
+								autofocus
+							>
+						</app-visual-validator>
+					</div>
+					<div class="form-group col-12 col-sm-3">
+						<label for="anoPublicacao">Ano de Publicação:</label>
+						<app-visual-validator [config]="validations" field="anoPublicacao">
+							<input
+								id="anoPublicacao"
+								type="number"
+								class="form-control"
+								formControlName="anoPublicacao"
+								placeholder="Ano"
+							>
+						</app-visual-validator>
+					</div>
+					<div class="form-group col-12 col-sm-3">
+						<label for="numPaginas">Número de Páginas:</label>
+						<app-visual-validator [config]="validations" field="numPaginas">
+							<input
+								id="numPaginas"
+								type="number"
+								class="form-control"
+								formControlName="numPaginas"
+								placeholder="0"
+							>
+						</app-visual-validator>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-12 col-sm-4">
+						<label for="genero">Gênero:</label>
+						<app-visual-validator [config]="validations" field="genero">
+							<ng-select id="genero"
+								[items]="generos"
+								bindValue="idGenero"
+								bindLabel="nome"
+								dropdownPosition="bottom"
+								placeholder="Selecione um gênero"
+								formControlName="genero"
+							></ng-select>
+						</app-visual-validator>
+					</div>
+					<div class="form-group col-12 col-sm-4">
+						<label for="autor">Autor:</label>
+						<app-visual-validator [config]="validations" field="autor">
+							<ng-select id="autor"
+								[items]="autores"
+								bindValue="idAutor"
+								bindLabel="nome"
+								dropdownPosition="bottom"
+								placeholder="Selecione um autor"
+								formControlName="autor"
+							></ng-select>
+						</app-visual-validator>
+					</div>
+					<div class="form-group col-12 col-sm-4">
+						<label for="preco">Preço:</label>
+						<app-visual-validator [config]="validations" field="preco">
+							<input
+								id="preco"
+								type="text"
+								class="form-control"
+								placeholder="R$ 0,00"
+								autocomplete="off"
+								formControlName="preco"
+								currencyMask
+								[options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
+							>
+						</app-visual-validator>
+					</div>
+				</div>
+
+				<div class="form-row">
+					<div class="form-group col-12">
+						<label for="sinopse">Sinopse:</label>
+						<app-visual-validator [config]="validations" field="sinopse">
+							<textarea
+								id="sinopse"
+								class="form-control"
+								formControlName="sinopse"
+								placeholder="Digite a sinopse do eBook"
+							></textarea>
+						</app-visual-validator>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<div class="mr-auto">
+			<button type="button" class="btn btn-dark mr-2" (click)="modalRef?.hide()">Cancelar</button>
+			<button type="button" class="btn btn-info" (click)="clear()">Limpar</button>
+		</div>
+
+		<button type="button" class="btn btn-success" (click)="save()" [disabled]="form.invalid">
+			<fa-icon [icon]="faSave"></fa-icon>
+			Salvar
+		</button>
+	</div>
+</ng-template>

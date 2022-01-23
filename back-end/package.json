@@ -1,0 +1,36 @@
+{
+	"name": "bd-tp-ebooks-back-end",
+	"version": "0.0.1",
+	"description": "Servidor da aplicação de venda de ebooks.",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon index.js"
+	},
+	"author": "Gabriel Ferreira dos Santos, Israel Amaral Linhares Terra, Lucas Alexsanderson da Fonseca, Lucas Rassilan Vilanova",
+	"license": "ISC",
+	"repository": {
+		"url": "https://github.com/Lucasrsv1/bd-tp-ebooks"
+	},
+	"dependencies": {
+		"console-stamp": "^3.0.3",
+		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1",
+		"express-validator": "^6.13.0",
+		"js-sha512": "^0.8.0",
+		"jsonwebtoken": "^8.5.1",
+		"morgan": "^1.10.0",
+		"pg": "^8.7.1"
+	},
+	"devDependencies": {
+		"eslint": "^8.1.0",
+		"nodemon": "^2.0.14"
+	},
+	"nodemonConfig": {
+		"ignore": [
+			".git",
+			"node_modules/",
+			"public/"
+		]
+	}
+}
