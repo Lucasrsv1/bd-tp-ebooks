@@ -23,6 +23,6 @@ export class AuthorsService {
 	}
 
 	public remove (idAutor: number): Observable<number> {
-		return this.http.get<number>(`${environment.API_URL}/v1/autores/${idAutor}`);
+		return this.http.delete<number>(`${environment.API_URL}/v1/autores/${idAutor}`);
 	}
 }

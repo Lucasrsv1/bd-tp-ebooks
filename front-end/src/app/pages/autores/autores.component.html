@@ -42,3 +42,64 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal de Adição/Edição -->
+<ng-template #modalGerenciamento>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">{{ editando ? "Editar" : "Adicionar" }} Autor</h4>
+		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<div class="modal-body">
+		<form [formGroup]="form" (ngSubmit)="save()">
+			<div class="text-left">
+				<div class="form-row">
+					<div class="form-group col-12">
+						<label for="nome">Nome:</label>
+						<app-visual-validator [config]="validations" field="nome">
+							<input
+								id="nome"
+								type="text"
+								class="form-control"
+								formControlName="nome"
+								placeholder="Digite o nome do autor"
+								autofocus
+							>
+						</app-visual-validator>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<div class="mr-auto">
+			<button type="button" class="btn btn-dark mr-2" (click)="modalRef?.hide()">Cancelar</button>
+			<button type="button" class="btn btn-info" (click)="clear()">Limpar</button>
+		</div>
+
+		<button type="button" class="btn btn-success" (click)="save()" [disabled]="form.invalid">
+			<fa-icon [icon]="faSave"></fa-icon>
+			Salvar
+		</button>
+	</div>
+</ng-template>
+
+<!-- Modal de Lista de eBooks -->
+<ng-template #modalLista>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">eBooks do Autor {{ selectedAuthor?.nome }}</h4>
+		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<div class="modal-body">
+		<ul class="mb-0" *ngIf="selectedAuthor?.titulos?.length">
+			<li *ngFor="let ebook of selectedAuthor?.titulos">{{ ebook }}</li>
+		</ul>
+		<p class="mb-0" *ngIf="!selectedAuthor?.titulos?.length">Este autor ainda não tem nenhum eBook.</p>
+	</div>
+</ng-template>

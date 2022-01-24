@@ -13,6 +13,7 @@ import { IValidations } from "src/app/components/visual-validator/visual-validat
 
 import { AlertsService } from "src/app/services/alerts/alerts.service";
 import { AuthorsService } from "src/app/services/authors/authors.service";
+import { finalize } from "rxjs/operators";
 
 @Component({
 	selector: "app-ebooks",
@@ -78,26 +79,26 @@ export class EbooksComponent implements OnInit, OnDestroy {
 			}
 		};
 
-		// Handle modal hide event
+		// Sai do modo de edição se o modal for fechado
 		this.subscriptions = this.modalService.onHide.subscribe(() => this.editando = null);
 	}
 
 	public ngOnInit (): void {
 		this.blockUI?.start("Carregando dados iniciais...");
-		this.authorsService.getAll().subscribe(
-			authors => {
-				this.blockUI?.stop();
-				this.autores = authors;
-			},
-			(error: HttpErrorResponse) => {
-				this.blockUI?.stop();
-				this.alertsService.httpErrorAlert(
-					"Erro ao Obter Autores",
-					"Não foi possível realizar a consulta, tente novamente.",
-					error
-				);
-			}
-		);
+		this.authorsService.getAll()
+			.pipe(finalize(() => this.blockUI?.stop()))
+			.subscribe(
+				authors => {
+					this.autores = authors;
+				},
+				(error: HttpErrorResponse) => {
+					this.alertsService.httpErrorAlert(
+						"Erro ao Obter Autores",
+						"Não foi possível realizar a consulta, tente novamente.",
+						error
+					);
+				}
+			);
 	}
 
 	public ngOnDestroy (): void {
