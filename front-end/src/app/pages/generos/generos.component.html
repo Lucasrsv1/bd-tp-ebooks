@@ -1,5 +1,83 @@
 <div class="container pt-3 pb-3">
 	<div class="card p-3">
-		<h1 class="text-primary">Gêneros</h1>
+		<div class="d-flex flex-row justify-content-between align-items-center mb-3 pl-3 pr-3">
+			<h1 class="text-primary">Gêneros</h1>
+			<div>
+				<button class="btn btn-primary" (click)="create()" title="Adicionar">
+					<fa-icon [icon]="faPlus"></fa-icon>
+					Novo Gênero
+				</button>
+			</div>
+		</div>
+
+		<div class="w-100 overflow-auto pb-2">
+			<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Nome</th>
+						<th class="actions text-center">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let gender of genres">
+						<td>{{ gender.idGenero }}</td>
+						<td>{{ gender.nome }}</td>
+						<td class="text-center">
+							<button class="btn btn-sm btn-primary ml-2" (click)="edit(gender)" title="Editar">
+								<fa-icon [icon]="faPencilAlt"></fa-icon>
+							</button>
+							<button class="btn btn-sm btn-danger ml-2" (click)="remove(gender)" title="Excluir">
+								<fa-icon [icon]="faTrashAlt"></fa-icon>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
+
+<!-- Modal de Adição/Edição -->
+<ng-template #modalGerenciamento>
+	<div class="modal-header">
+		<h4 class="modal-title pull-left">{{ editando ? "Editar" : "Adicionar" }} Gênero</h4>
+		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<div class="modal-body">
+		<form [formGroup]="form" (ngSubmit)="save()">
+			<div class="text-left">
+				<div class="form-row">
+					<div class="form-group col-12">
+						<label for="nome">Nome:</label>
+						<app-visual-validator [config]="validations" field="nome">
+							<input
+								id="nome"
+								type="text"
+								class="form-control"
+								formControlName="nome"
+								placeholder="Digite o nome do gênero"
+								autofocus
+							>
+						</app-visual-validator>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<div class="mr-auto">
+			<button type="button" class="btn btn-dark mr-2" (click)="modalRef?.hide()">Cancelar</button>
+			<button type="button" class="btn btn-info" (click)="clear()">Limpar</button>
+		</div>
+
+		<button type="button" class="btn btn-success" (click)="save()" [disabled]="form.invalid">
+			<fa-icon [icon]="faSave"></fa-icon>
+			Salvar
+		</button>
+	</div>
+</ng-template>

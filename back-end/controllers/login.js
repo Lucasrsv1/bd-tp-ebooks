@@ -59,7 +59,8 @@ async function login (req, res) {
 
 	try {
 		// Faz o hash da senha antes de fazer o login
-		const password = sha512(req.body.password);
+		// const password = sha512(req.body.password);
+		const password = req.body.password;
 
 		const user = await db.findOne(`
 			SELECT id_usuario AS "idUsuario", nome, email, funcionario

@@ -9,6 +9,47 @@
 				</button>
 			</div>
 		</div>
+
+		<div class="w-100 overflow-auto pb-2">
+			<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Título</th>
+						<th>Sinopse</th>
+						<th>Gênero</th>
+						<th>Autor</th>
+						<th>Preço</th>
+						<th>Publicação</th>
+						<th>N. Páginas</th>
+						<th>Downloads</th>
+						<!-- <th>Autor</th> -->
+						<th class="actions text-center">Ações</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let ebook of ebooks">
+						<td>{{ ebook.idEbook }}</td>
+						<td>{{ ebook.titulo }}</td>
+						<td>{{ ebook.sinopse }}</td>
+						<td>{{ ebook.genero }}</td>
+						<td>{{ ebook.autor }}</td>
+						<td>{{ ebook.preco }}</td>
+						<td>{{ ebook.anoPublicacao }}</td>
+						<td>{{ ebook.numPaginas }}</td>
+						<td>{{ ebook.downloads }}</td>
+						<td class="text-center">
+							<button class="btn btn-sm btn-primary ml-2" (click)="edit(ebook)" title="Editar">
+								<fa-icon [icon]="faPencilAlt"></fa-icon>
+							</button>
+							<button class="btn btn-sm btn-danger ml-2" (click)="remove(ebook)" title="Excluir">
+								<fa-icon [icon]="faTrashAlt"></fa-icon>
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 

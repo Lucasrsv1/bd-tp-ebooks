@@ -2,4 +2,9 @@
 	<div class="card p-3">
 		<h1 class="text-primary">eBooks a Venda</h1>
 	</div>
+
+	<div *ngFor="let ebook of ebooks">
+		<div>{{ ebook.titulo }}</div>
+	</div>
+
 </div>
