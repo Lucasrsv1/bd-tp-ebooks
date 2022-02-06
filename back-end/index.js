@@ -9,7 +9,7 @@ const express = require("express");
 const logger = require("morgan");
 const path = require("path");
 const { closeConnection } = require("./database");
-const HandlingError = require('./middleware/handlingError');
+
 
 const routes = require("./routes");
 
@@ -20,7 +20,7 @@ const app = express();
 app.set("port", port);
 app.use(logger("[:date[clf]] :method :url :status :response-time ms - :res[content-length]"));
 app.use(express.json());
-app.use(HandlingError)
+
 
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({

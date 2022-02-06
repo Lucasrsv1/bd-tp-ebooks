@@ -11,20 +11,10 @@ const { isRequestInvalid } = require("../utils/http-validation");
 async function getAll(req, res) {
     try {
         const dados = await db.findAll(`
-			SELECT id_usuario,nome,email,funcionario
-			FROM usuarios
+			SELECT *
+			FROM ebooks
 		`);
-
-        const map = [];
-        for (const dado of dados) {
-            map.push({
-                id: dado.id_usuario,
-                email: dado.email,
-                nome: dado.nome,
-                funcionario: dado.funcionario
-            });
-        }
-        res.status(200).json(map);
+        res.status(200).json(dados);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.message, error });
@@ -37,12 +27,12 @@ async function getAll(req, res) {
  */
 async function insert(req, res) {
     if (isRequestInvalid(req, res)) return;
-    var user = req.body;
+    var ebook = req.body;
     try {
         const result = await db.execute(`
-			INSERT INTO usuarios (nome,email,senha,funcionario)
-			VALUES ('${user.nome}','${user.email}','${user.senha}','${user.funcionario}')
-			RETURNING id_usuario AS "idUsuario"
+			INSERT INTO ebooks (titulo,ano_publicacao,num_paginas,preco,sinopse,capa,id_genero,id_autor)
+			VALUES ('${ebook.titulo}','${ebook.ano_publicacao}','${ebook.num_paginas}','${ebook.preco}','${ebook.sinopse}','${ebook.capa}','${ebook.id_genero}','${ebook.id_autor}')
+			RETURNING id_ebook AS "idEbook"
 		`);
         console.log(result)
         res.status(201).json(result.rows[0]);
@@ -53,7 +43,7 @@ async function insert(req, res) {
 }
 
 insert.validations = [
-    body("nome").isString().withMessage("Usuario inválido.")
+    body("titulo").isString().withMessage("Titulo inválido.")
 ];
 
 /**
@@ -65,15 +55,15 @@ async function update(req, res) {
 
     try {
         const result = await db.execute(`
-			UPDATE usuarios SET nome = '${req.body.nome}'
-			WHERE id_usuario = ${req.body.idUsuario}
-			RETURNING id_usuario AS "idUsuario", nome
+			UPDATE ebooks SET preco = '${req.body.preco}'
+			WHERE id_ebook = ${req.body.idEbook}
+			RETURNING id_ebook AS "idEbook", titulo, preco
 		`);
 
         if (result.rowCount > 0)
             res.status(200).json(result.rows[0]);
         else
-            res.status(404).json({ message: "Usuario não encontrado." });
+            res.status(404).json({ message: "Ebook não encontrado." });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.message, error });
@@ -82,8 +72,7 @@ async function update(req, res) {
 
 update.validations = [
     ensureAuthorizedEmployee,
-    body("nome").isString().withMessage("Nome inválido."),
-    body("idUsuario").isNumeric().withMessage("A ID do usuario é inválida.").toInt()
+    body("idEbook").isNumeric().withMessage("A ID do ebook é inválida.").toInt()
 ];
 
 /**
@@ -95,14 +84,14 @@ async function remove(req, res) {
 console.log(req.params.idUsuario)
     try {
         const result = await db.execute(`
-			DELETE FROM usuarios
-			WHERE id_usuario = ${req.params.idUsuario}
+			DELETE FROM ebooks
+			WHERE id_ebook = ${req.params.idEbook}
 		`);
 
         if (result.rowCount > 0)
             res.status(200).json(result.rowCount);
         else
-            res.status(404).json({ message: "Usuario não encontrado." });
+            res.status(404).json({ message: "Ebook não encontrado." });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: error.message, error });
@@ -111,7 +100,7 @@ console.log(req.params.idUsuario)
 
 remove.validations = [
     ensureAuthorizedEmployee,
-    param("idUsuario").isNumeric().withMessage("A ID do usuario é inválida.").toInt()
+    param("idEbook").isNumeric().withMessage("A ID do ebook é inválida.").toInt()
 ];
 
 module.exports = { getAll, insert, update, remove };

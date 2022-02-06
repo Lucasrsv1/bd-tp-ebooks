@@ -51,7 +51,7 @@ async function insert (req, res) {
 
 	try {
 		const result = await db.execute(`
-			INSERT INTO genero (nome)
+			INSERT INTO generos (nome)
 			VALUES ('${req.body.nome}')
 			RETURNING id_genero AS "idGenero", nome
 		`);
@@ -107,7 +107,7 @@ async function remove (req, res) {
 
 	try {
 		const result = await db.execute(`
-			DELETE FROM autores
+			DELETE FROM generos
 			WHERE id_genero = ${req.params.idGenero}
 		`);
 

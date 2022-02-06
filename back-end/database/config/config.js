@@ -3,7 +3,7 @@
  */
 module.exports = {
 	user: "postgres",
-	password: "root",
+	password: "1997verdade",
 	database: "bd_tp_ebooks",
 	host: "127.0.0.1",
 	port: 5432,
