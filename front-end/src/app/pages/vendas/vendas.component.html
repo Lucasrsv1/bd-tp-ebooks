@@ -1,5 +1,30 @@
 <div class="container pt-3 pb-3">
 	<div class="card p-3">
-		<h1 class="text-primary">Vendas</h1>
+		<div class="d-flex flex-row justify-content-between align-items-center mb-3 pl-3 pr-3">
+			<h1 class="text-primary">Vendas</h1>
+		</div>
+
+		<div class="w-100 overflow-auto pb-2">
+			<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Titulo</th>
+						<th>Preço Pago</th>
+						<th>Nome Comprador</th>
+						<th>Data da Venda</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="let sale of sales">
+						<td>{{ sale.idVenda }}</td>
+						<td>{{ sale.ebookTitulo }}</td>
+						<td>{{ sale.precoPago }}</td>
+						<td>{{ sale.nomeComprador }}</td>
+						<td>{{ sale.dataCompra | date: "dd/MM/yyyy '-' HH:mm" }}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>

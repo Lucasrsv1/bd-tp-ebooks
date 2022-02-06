@@ -1,24 +1,26 @@
-import { EbooksService } from 'src/app/services/ebooks/ebooks.service';
-import { GenresService } from 'src/app/services/genres/genres.service';
-import { IEbook } from './../../interfaces/ebook';
+
 import { HttpErrorResponse } from "@angular/common/http";
 import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
-import { Observable, Subject, Subscription } from "rxjs";
+import { DataTableDirective } from "angular-datatables";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { faBook, faPencilAlt, faPlus, faSave, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-
-import { IAutor } from "src/app/interfaces/autor";
-import { IGenero } from "src/app/interfaces/genero";
-import { IValidations } from "src/app/components/visual-validator/visual-validator.component";
+import { Observable, Subject, Subscription } from "rxjs";
 
 import { AlertsService } from "src/app/services/alerts/alerts.service";
 import { AuthorsService } from "src/app/services/authors/authors.service";
 import { finalize } from "rxjs/operators";
-import { DataTableDirective } from 'angular-datatables';
-import { UtilsService } from 'src/app/services/utils/utils.service';
+
+import { IAutor } from "src/app/interfaces/autor";
+import { IEbook } from "src/app/interfaces/ebook";
+import { IGenero } from "src/app/interfaces/genero";
+import { IValidations } from "src/app/components/visual-validator/visual-validator.component";
+
+import { EbooksService } from "src/app/services/ebooks/ebooks.service";
+import { GenresService } from "src/app/services/genres/genres.service";
+import { UtilsService } from "src/app/services/utils/utils.service";
 
 @Component({
 	selector: "app-ebooks",
