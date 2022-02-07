@@ -1,5 +1,65 @@
 <div class="container pt-5 pb-5">
 	<div class="card p-3">
 		<h1 class="text-primary">Cadastro</h1>
+
+		<form [formGroup]="form" (ngSubmit)="cadastrar()">
+			<div class="text-left">
+
+				<div class="form-group">
+					<label for="nome">Nome:</label>
+					<app-visual-validator [config]="validations" field="nome">
+						<input
+							#nomeInput
+							id="nome"
+							type="text"
+							class="form-control"
+							formControlName="nome"
+							placeholder="Digite seu nome"
+							autofocus
+						>
+					</app-visual-validator>
+				</div>
+
+				<div class="form-group">
+					<label for="email">E-mail:</label>
+					<app-visual-validator [config]="validations" field="email">
+						<input
+							id="email"
+							type="email"
+							class="form-control"
+							formControlName="email"
+							placeholder="Digite seu e-mail"
+							autofocus
+						>
+					</app-visual-validator>
+				</div>
+
+				<div class="form-group">
+					<label for="senha">Senha:</label>
+					<app-visual-validator [config]="validations" field="senha">
+						<input
+							id="senha"
+							type="password"
+							class="form-control"
+							placeholder="Digite sua senha"
+							formControlName="senha"
+						>
+					</app-visual-validator>
+				</div>
+			</div>
+
+			<div class="text-center mb-3">
+				<a [routerLink]="['/login']">Já tem conta? faça login aqui!</a>
+			</div>
+
+			<div class="text-center">
+				<button class="btn btn-dark pl-5 pr-5 mb-3 mr-3" type="button" (click)="clear()">
+					Limpar
+				</button>
+				<button class="btn btn-primary pl-5 pr-5 mb-3" type="submit" [disabled]="form.invalid">
+					Cadastrar
+				</button>
+			</div>
+		</form>
 	</div>
 </div>

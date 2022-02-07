@@ -52,6 +52,32 @@ export class AuthenticationService {
 		);
 	}
 
+	public cadatrar (nome: string, email: string, senha: string, blockUI?: NgBlockUI): void {
+		senha = sha512(senha);
+
+		this.http.post<{ token: string }>(
+			`${environment.API_URL}/v1/usuarios`,
+			{ nome, email, senha }
+		).subscribe(
+			response => {
+				if (blockUI) blockUI.stop();
+
+				this.localStorage.set(LocalStorageKey.USER, response.token);
+				this.router.navigate(["home"]);
+				this.$loggedClient.next(this.getLoggedUser());
+			},
+			(error: HttpErrorResponse) => {
+				if (blockUI) blockUI.stop();
+
+				this.alertsService.httpErrorAlert(
+					"Falha ao Cadastrar",
+					"Não foi possível fazer o cadastro, tente novamente.",
+					error
+				);
+			}
+		);
+	}
+
 	public signOut (): void {
 		this.localStorage.delete(LocalStorageKey.USER);
 		this.$loggedClient.next(null);

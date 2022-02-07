@@ -1,9 +1,13 @@
 const { body } = require("express-validator");
 const { sha512 } = require("js-sha512");
+const { sign } = require("jsonwebtoken");
 
 const db = require("../database");
 const { ensureAuthorized } = require("./login");
 const { isRequestInvalid } = require("../utils/http-validation");
+
+const KEY_TOKEN = "!*conV*dgzaSx!KGraV22eTofP1O697I";
+const EXPIRATION_TIME = 3 * 24 * 60 * 60;
 
 /**
  * @param {import("express").Request} req
@@ -19,10 +23,12 @@ async function insert (req, res) {
 		const result = await db.execute(`
 			INSERT INTO usuarios (nome, email, senha, funcionario)
 			VALUES ('${req.body.nome}', '${req.body.email}', '${password}', false)
-			RETURNING id_usuario AS "idUsuario", email, funcionario
+			RETURNING id_usuario AS "idUsuario", nome, email, funcionario
 		`);
 
-		res.status(201).json(result.rows[0]);
+		const token = sign(result.rows[0], KEY_TOKEN, { expiresIn: EXPIRATION_TIME });
+
+		res.status(200).json({ token });
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: error.message, error });
