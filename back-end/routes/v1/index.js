@@ -5,6 +5,7 @@ const autoresRouter = require("./autores");
 const ebooksRouter = require("./ebooks");
 const generosRouter = require("./generos");
 const funcionariosRouter = require("./funcionarios");
+const usuariosRouter = require("./usuarios");
 const vendasRouter = require("./vendas");
 
 const router = Router();
@@ -20,6 +21,8 @@ router.use("/generos", generosRouter);
 router.use("/ebooks", ebooksRouter);
 
 router.use("/autores", autoresRouter);
+
+router.use("/usuarios", usuariosRouter);
 
 router.use(loginRouter);
 
