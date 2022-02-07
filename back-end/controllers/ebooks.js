@@ -10,11 +10,33 @@ const { ensureAuthorizedEmployee } = require("./login");
  */
 async function getAll (req, res) {
 	try {
+		const minReceita = req.query.minReceita ? Number(req.query.minReceita) : null;
 		const result = await db.findAll(`
-			SELECT e.id_ebook AS "idEbook", e.capa, e.num_paginas AS "numPaginas", e.qtd_downloads AS "downloads", e.sinopse, e.ano_publicacao AS "anoPublicacao", e.preco, e.titulo, g.nome AS "genero", a.nome AS "autor", a.id_autor AS "idAutor", g.id_genero AS "idGenero"
-			FROM ebooks e
-			JOIN autores a ON e.id_autor = a.id_autor
-			JOIN generos g ON e.id_genero = g.id_genero;
+			SELECT
+				E.id_ebook AS "idEbook",
+				E.capa,
+				E.num_paginas AS "numPaginas",
+				E.qtd_downloads AS "downloads",
+				E.sinopse,
+				E.ano_publicacao AS "anoPublicacao",
+				E.preco,
+				E.titulo,
+				G.nome AS "genero",
+				A.nome AS "autor",
+				A.id_autor AS "idAutor",
+				G.id_genero AS "idGenero",
+				SUM(V.preco_pago) AS "receita",
+				(
+					SELECT COUNT(DISTINCT Ve.id_usuario_comprador)
+					FROM vendas Ve
+					WHERE Ve.id_ebook = E.id_ebook
+				) AS "qtdCompradores"
+			FROM ebooks E
+			INNER JOIN autores A ON E.id_autor = A.id_autor
+			INNER JOIN generos G ON E.id_genero = G.id_genero
+			LEFT OUTER JOIN vendas V ON V.id_ebook = E.id_ebook
+			GROUP BY E.id_ebook, G.id_genero, A.id_autor
+			${minReceita > 0 ? "HAVING SUM(V.preco_pago) >= " + minReceita.toString() : ""};
 		`);
 
 		res.status(200).json(result);

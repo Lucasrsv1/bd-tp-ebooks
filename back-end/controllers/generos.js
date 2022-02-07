@@ -11,8 +11,10 @@ const { isRequestInvalid } = require("../utils/http-validation");
 async function getAll (req, res) {
 	try {
 		const result = await db.findAll(`
-			SELECT nome, id_genero AS "idGenero"
-			FROM generos;
+			SELECT G.id_genero AS "idGenero", G.nome, COUNT(E.id_ebook) AS "qtdEbooks"
+			FROM generos G
+			LEFT OUTER JOIN ebooks E ON E.id_genero = G.id_genero
+			GROUP BY G.id_genero;
 		`);
 
 		res.status(200).json(result);
@@ -58,7 +60,7 @@ async function update (req, res) {
 	try {
 		const result = await db.execute(`
 			UPDATE generos SET nome = '${req.body.nome}'
-			WHERE id_genero = ${req.body.idAutor}
+			WHERE id_genero = ${req.body.idGenero}
 			RETURNING id_genero AS "idGenero", nome
 		`);
 

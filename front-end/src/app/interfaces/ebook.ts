@@ -6,9 +6,11 @@ export interface IEbook {
 	sinopse: string;
 	anoPublicacao: number;
 	downloads: number;
-	capa: string;
+	capa: string | null;
 	autor: string;
 	genero:	string;
 	idAutor: number;
 	idGenero: number;
+	qtdCompradores: number;
+	receita?: number;
 }

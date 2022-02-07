@@ -11,4 +11,7 @@ export class SalesService {
 		return this.http.get<any>(`${environment.API_URL}/v1/vendas`);
 	}
 
+	public getMyPurchases () {
+		return this.http.get<any>(`${environment.API_URL}/v1/vendas/usuario`);
+	}
 }

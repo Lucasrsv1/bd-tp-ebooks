@@ -1,10 +1,11 @@
 const { Router } = require("express");
 
 const generosController = require("../../controllers/generos");
+const { ensureAuthorized } = require("../../controllers/login");
 
 const router = Router();
 
-router.get("/", generosController.getAll, generosController.getAll);
+router.get("/", ensureAuthorized, generosController.getAll);
 
 router.post("/", generosController.insert.validations, generosController.insert);
 

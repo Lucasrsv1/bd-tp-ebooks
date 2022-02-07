@@ -27,7 +27,7 @@ export class AuthenticationService {
 
 	public login (email: string, password: string, blockUI?: NgBlockUI): void {
 		// Faz o hash da senha antes de fazer o login
-		// password = sha512(password);
+		password = sha512(password);
 
 		this.http.post<{ token: string }>(
 			`${environment.API_URL}/v1/login`,

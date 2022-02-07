@@ -3,6 +3,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } f
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
 import { DataTableDirective } from "angular-datatables";
+import { sha512 } from "js-sha512";
 import { BlockUI, NgBlockUI } from "ng-block-ui";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { faBook, faPencilAlt, faPlus, faSave, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
@@ -17,14 +18,12 @@ import { IValidations } from "src/app/components/visual-validator/visual-validat
 import { UtilsService } from "src/app/services/utils/utils.service";
 import { WorkersService } from "src/app/services/workers/workers.service";
 
-
 @Component({
 	selector: "app-funcionarios",
 	templateUrl: "./funcionarios.component.html",
 	styleUrls: ["./funcionarios.component.scss"]
 })
 export class FuncionariosComponent implements OnInit, OnDestroy, AfterViewInit {
-
 	@BlockUI()
 	private blockUI?: NgBlockUI;
 
@@ -63,6 +62,7 @@ export class FuncionariosComponent implements OnInit, OnDestroy, AfterViewInit {
 
 		this.dtOptions = {
 			stateSave: true,
+			columnDefs: [{ targets: 3, orderable: false }],
 			language: this.utilsService.getDataTablesTranslation("Nenhum gênero cadastrado")
 		};
 
@@ -76,13 +76,16 @@ export class FuncionariosComponent implements OnInit, OnDestroy, AfterViewInit {
 			form: this.form,
 			fields: {
 				nome: [{ key: "required" }],
-				email: [{ key: "required" }, { key: "email" }]
+				email: [
+					{ key: "required" },
+					{ key: "email" }
+				],
+				senha: [{ key: "required" }]
 			}
 		};
 
 		// Sai do modo de edição se o modal for fechado
 		this.subscriptions = this.modalService.onHide.subscribe(() => this.editando = null);
-
 	}
 
 	public ngOnInit (): void {
@@ -95,6 +98,7 @@ export class FuncionariosComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	public ngOnDestroy (): void {
 	  this.dtTrigger.unsubscribe();
+	  this.subscriptions.unsubscribe();
 	}
 
 	public getAll (): void {
@@ -145,20 +149,20 @@ export class FuncionariosComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	public save (): void {
-
 		this.blockUI?.start("Salvando funcionario...");
 		let worker$: Observable<IFuncionario>;
 
+		// Faz o hash da senha antes de fazer o cadastro
 		const data: any = {
 			nome: this.form.get("nome")?.value,
-			email: this.form.get("email")?.value,
-			senha: this.form.get("senha")?.value
+			email: this.form.get("email")?.value
 		};
 
 		if (this.editando) {
 			data.idFuncionario = this.editando.idFuncionario;
 			worker$ = this.workersService.edit(data);
 		} else {
+			data.senha = sha512(this.form.get("senha")?.value);
 			worker$ = this.workersService.create(data);
 		}
 

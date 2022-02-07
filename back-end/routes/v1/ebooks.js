@@ -1,10 +1,11 @@
 const { Router } = require("express");
 
 const ebooksController = require("../../controllers/ebooks");
+const { ensureAuthorized } = require("../../controllers/login");
 
 const router = Router();
 
-router.get("/", ebooksController.getAll, ebooksController.getAll);
+router.get("/", ensureAuthorized, ebooksController.getAll);
 
 router.post("/", ebooksController.insert.validations, ebooksController.insert);
 

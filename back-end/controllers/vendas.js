@@ -1,8 +1,4 @@
-const { body, param } = require("express-validator");
-
 const db = require("../database");
-const { isRequestInvalid } = require("../utils/http-validation");
-const { ensureAuthorizedEmployee } = require("./login");
 
 /**
  * @param {import("express").Request} req
@@ -10,12 +6,11 @@ const { ensureAuthorizedEmployee } = require("./login");
  */
 async function getAll (req, res) {
 	try {
-
 		const result = await db.findAll(`
-			SELECT v.id_venda AS "idVenda", v.data_compra AS "dataCompra", u.nome AS "nomeComprador", e.titulo AS "ebookTitulo", v.preco_pago AS "precoPago"
-			FROM vendas v
-			JOIN usuarios u ON u.id_usuario = v.id_usuario_comprador
-			JOIN ebooks e ON e.id_ebook = v.id_ebook
+			SELECT V.id_venda AS "idVenda", V.data_compra AS "dataCompra", U.nome AS "nomeComprador", E.titulo AS "ebookTitulo", V.preco_pago AS "precoPago"
+			FROM vendas V
+			INNER JOIN usuarios U ON U.id_usuario = V.id_usuario_comprador
+			INNER JOIN ebooks E ON E.id_ebook = V.id_ebook;
 		`);
 
 		res.status(200).json(result);
@@ -25,4 +20,27 @@ async function getAll (req, res) {
 	}
 }
 
-module.exports = { getAll };
+/**
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+async function getMyPurchases (req, res) {
+	try {
+		if (!res.locals.user || !res.locals.user.idUsuario)
+			return res.status(400).json({ message: "Usuário não identificado." });
+
+		const result = await db.findAll(`
+			SELECT V.id_venda AS "idVenda", V.data_compra AS "dataCompra", E.titulo AS "ebookTitulo", V.preco_pago AS "precoPago"
+			FROM vendas V
+			INNER JOIN ebooks E ON E.id_ebook = V.id_ebook
+			WHERE V.id_usuario_comprador = ${res.locals.user.idUsuario}
+		`);
+
+		res.status(200).json(result);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: error.message, error });
+	}
+}
+
+module.exports = { getAll, getMyPurchases };

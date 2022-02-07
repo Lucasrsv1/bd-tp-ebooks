@@ -30,8 +30,13 @@ app.use("/api", routes);
 
 app.use(express.static(path.join(__dirname, "public")));
 
+app.use("/covers", express.static(path.join(__dirname, "covers")));
+
 // Manda todos as outras requisições para o index.html
 app.get("/*", (req, res) => {
+	if (req.path.indexOf("/covers") === 0)
+		return res.status(404).json({ message: "Arquivo não encontrado." });
+
 	res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 

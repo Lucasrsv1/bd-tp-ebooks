@@ -62,6 +62,7 @@ export class AutoresComponent implements OnInit, AfterViewInit, OnDestroy {
 	) {
 		this.dtOptions = {
 			stateSave: true,
+			columnDefs: [{ targets: 3, orderable: false }],
 			language: this.utilsService.getDataTablesTranslation("Nenhum autor cadastrado")
 		};
 

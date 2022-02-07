@@ -3,6 +3,7 @@
 # compiled output
 dist
 back-end/public/*
+back-end/covers/*
 tmp
 out-tsc
 # Only exists if Bazel was run
@@ -44,3 +45,10 @@ typings
 
 !.gitkeep
 !back-end/public/index.html
+
+# Capas dos ebooks dos inserts iniciais
+!back-end/covers/1644179890637.jpg
+!back-end/covers/1644179933959.jpg
+!back-end/covers/1644179968753.jpg
+!back-end/covers/1644179997489.jpg
+!back-end/covers/1644180447807.jpg

@@ -26,7 +26,7 @@
 						<td>{{ worker.nome }}</td>
 						<td>{{ worker.email }}</td>
 						<td class="text-center">
-							<button class="btn btn-sm btn-primary ml-2" (click)="edit(worker)" title="Editar">
+							<button class="btn btn-sm btn-primary" (click)="edit(worker)" title="Editar">
 								<fa-icon [icon]="faPencilAlt"></fa-icon>
 							</button>
 							<button class="btn btn-sm btn-danger ml-2" (click)="remove(worker)" title="Excluir">
@@ -38,14 +38,12 @@
 			</table>
 		</div>
 	</div>
-
 </div>
-
 
 <!-- Modal de Adição/Edição -->
 <ng-template #modal>
 	<div class="modal-header">
-		<h4 class="modal-title pull-left">{{ editando ? "Editar" : "Adicionar" }} eBook</h4>
+		<h4 class="modal-title pull-left">{{ editando ? "Editar" : "Adicionar" }} Funcionário</h4>
 		<button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
 			<span aria-hidden="true">&times;</span>
 		</button>
@@ -56,14 +54,14 @@
 			<div class="text-left">
 				<div class="form-row">
 					<div class="form-group col-12 col-sm-12">
-						<label for="titulo">Nome:</label>
-						<app-visual-validator [config]="validations" field="titulo">
+						<label for="nome">Nome:</label>
+						<app-visual-validator [config]="validations" field="nome">
 							<input
 								id="nome"
 								type="text"
 								class="form-control"
 								formControlName="nome"
-								placeholder="Digite o nome do funcionario"
+								placeholder="Digite o nome do funcionário"
 								autofocus
 							>
 						</app-visual-validator>
@@ -72,29 +70,27 @@
 
 				<div class="form-row">
 					<div class="form-group col-12 col-sm-6">
-						<label for="titulo">E-mail:</label>
-						<app-visual-validator [config]="validations" field="titulo">
+						<label for="email">E-mail:</label>
+						<app-visual-validator [config]="validations" field="email">
 							<input
 								id="email"
 								type="text"
 								class="form-control"
 								formControlName="email"
-								placeholder="Digite o email"
-								autofocus
+								placeholder="Digite o email do funcionário"
 							>
 						</app-visual-validator>
 					</div>
 
 					<div class="form-group col-12 col-sm-6" *ngIf="!editando">
-						<label for="titulo">Senha:</label>
-						<app-visual-validator [config]="validations" field="titulo">
+						<label for="senha">Senha:</label>
+						<app-visual-validator [config]="validations" field="senha">
 							<input
-								id="email"
+								id="senha"
 								type="text"
 								class="form-control"
 								formControlName="senha"
-								placeholder="Digite o email"
-								autofocus
+								placeholder="Digite uma senha para o funcionário"
 							>
 						</app-visual-validator>
 					</div>

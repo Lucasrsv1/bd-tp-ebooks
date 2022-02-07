@@ -11,7 +11,7 @@ import { Observable, Subject, Subscription } from "rxjs";
 
 import { AlertsService } from "src/app/services/alerts/alerts.service";
 import { AuthorsService } from "src/app/services/authors/authors.service";
-import { finalize } from "rxjs/operators";
+import { debounceTime, finalize } from "rxjs/operators";
 
 import { IAutor } from "src/app/interfaces/autor";
 import { IEbook } from "src/app/interfaces/ebook";
@@ -37,11 +37,18 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 	@ViewChild("modal", { static: true })
 	private modal!: TemplateRef<any>;
 
+	@ViewChild("synopsisModal", { static: true })
+	private synopsisModal!: TemplateRef<any>;
+
 	public form: FormGroup;
 	public validations: IValidations;
 	public modalRef?: BsModalRef;
 
+	public minReceita: number = 0;
+	public minReceita$: Subject<number> = new Subject();
+
 	public editando: IEbook | null = null;
+	public selectedEbook: IEbook | null = null;
 	public generos: IGenero[] = [];
 	public autores: IAutor[] = [];
 	public ebooks: IEbook[] = [];
@@ -55,7 +62,7 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 	public faSave = faSave;
 	public faTrashAlt = faTrashAlt;
 
-	private subscriptions: Subscription;
+	private subscriptions: Subscription[] = [];
 
 	constructor (
 		private readonly modalService: BsModalService,
@@ -66,9 +73,9 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 		private readonly ebooksService: EbooksService,
 		private readonly utilsService: UtilsService
 	) {
-
 		this.dtOptions = {
 			stateSave: true,
+			columnDefs: [{ targets: 10, orderable: false }],
 			language: this.utilsService.getDataTablesTranslation("Nenhum gênero cadastrado")
 		};
 
@@ -106,7 +113,10 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 		};
 
 		// Sai do modo de edição se o modal for fechado
-		this.subscriptions = this.modalService.onHide.subscribe(() => this.editando = null);
+		this.subscriptions.push(this.modalService.onHide.subscribe(() => this.editando = null));
+
+		// Monitora mudanças no filtro de receita mínima
+		this.subscriptions.push(this.minReceita$.pipe(debounceTime(500)).subscribe(this.getAll.bind(this)));
 	}
 
 	public ngOnInit (): void {
@@ -148,12 +158,13 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 	}
 
 	public ngOnDestroy (): void {
-	  this.dtTrigger.unsubscribe();
-	  this.subscriptions.unsubscribe();
+		this.dtTrigger.unsubscribe();
+		for (const subscription of this.subscriptions)
+			subscription.unsubscribe();
 	}
 
 	public getAll (): void {
-		this.ebooksService.getAll()
+		this.ebooksService.getAll(this.minReceita)
 			.pipe(finalize(() => this.blockUI?.stop()))
 			.subscribe(
 				ebooks => {
@@ -189,6 +200,11 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 		this.clear();
 	}
 
+	public showSynopsis (ebook: IEbook): void {
+		this.selectedEbook = ebook;
+		this.modalRef = this.modalService.show(this.synopsisModal);
+	}
+
 	public edit (ebook: IEbook): void {
 		this.editando = ebook;
 		this.modalRef = this.modalService.show(this.modal, { class: "modal-lg" });
@@ -221,7 +237,7 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 			numPaginas: this.form.get("numPaginas")?.value,
 			preco: this.form.get("preco")?.value,
 			sinopse: this.form.get("sinopse")?.value,
-			capa: "nenhum",
+			capa: null,
 			idGenero: this.form.get("genero")?.value,
 			idAutor: this.form.get("autor")?.value
 		};

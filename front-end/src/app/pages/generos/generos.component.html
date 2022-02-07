@@ -16,6 +16,7 @@
 					<tr>
 						<th>ID</th>
 						<th>Nome</th>
+						<th>Quantidade de eBooks</th>
 						<th class="actions text-center">Ações</th>
 					</tr>
 				</thead>
@@ -23,8 +24,9 @@
 					<tr *ngFor="let gender of genres">
 						<td>{{ gender.idGenero }}</td>
 						<td>{{ gender.nome }}</td>
+						<td>{{ gender.qtdEbooks || 0 }}</td>
 						<td class="text-center">
-							<button class="btn btn-sm btn-primary ml-2" (click)="edit(gender)" title="Editar">
+							<button class="btn btn-sm btn-primary" (click)="edit(gender)" title="Editar">
 								<fa-icon [icon]="faPencilAlt"></fa-icon>
 							</button>
 							<button class="btn btn-sm btn-danger ml-2" (click)="remove(gender)" title="Excluir">

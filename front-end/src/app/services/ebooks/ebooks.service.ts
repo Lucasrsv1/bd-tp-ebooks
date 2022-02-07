@@ -10,8 +10,8 @@ import { IEbook } from "src/app/interfaces/ebook";
 export class EbooksService {
 	constructor (private readonly http: HttpClient) { }
 
-	public getAll () {
-		return this.http.get<any>(`${environment.API_URL}/v1/ebooks`);
+	public getAll (minReceita: number = 0) {
+		return this.http.get<any>(`${environment.API_URL}/v1/ebooks`, { params: { minReceita } });
 	}
 
 	public create (data: any): Observable<IEbook> {

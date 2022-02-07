@@ -1,4 +1,5 @@
 const { body, param } = require("express-validator");
+const { sha512 } = require("js-sha512");
 
 const db = require("../database");
 const { isRequestInvalid } = require("../utils/http-validation");
@@ -31,9 +32,12 @@ async function insert (req, res) {
 	if (isRequestInvalid(req, res)) return;
 
 	try {
+		// Faz o hash da senha antes de fazer o login
+		const password = sha512(req.body.senha);
+
 		const result = await db.execute(`
 			INSERT INTO usuarios (nome, email, senha, funcionario)
-			VALUES ('${req.body.nome}', '${req.body.email}', '${req.body.senha}', true)
+			VALUES ('${req.body.nome}', '${req.body.email}', '${password}', true)
 			RETURNING id_usuario AS "idFuncionario", nome, email
 		`);
 
@@ -78,7 +82,7 @@ async function update (req, res) {
 update.validations = [
 	ensureAuthorizedEmployee,
 	body("nome").isString().withMessage("Nome inválido."),
-	body("email").isString().withMessage("Email inválido."),
+	body("email").isString().withMessage("Email inválido.")
 ];
 
 /**

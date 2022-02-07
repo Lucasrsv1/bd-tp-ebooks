@@ -1,10 +1,11 @@
 const { Router } = require("express");
 
 const funcionarioController = require("../../controllers/funcionarios");
+const { ensureAuthorizedEmployee } = require("../../controllers/login");
 
 const router = Router();
 
-router.get("/", funcionarioController.getAll, funcionarioController.getAll);
+router.get("/", ensureAuthorizedEmployee, funcionarioController.getAll);
 
 router.post("/", funcionarioController.insert.validations, funcionarioController.insert);
 
