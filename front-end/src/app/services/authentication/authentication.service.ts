@@ -109,7 +109,7 @@ export class AuthenticationService {
 	public signOut (): void {
 		this.localStorage.delete(LocalStorageKey.USER);
 		this.$loggedClient.next(null);
-		this.router.navigate(["home"]);
+		this.router.navigate(["login"]);
 	}
 
 	public isLoggedIn (): boolean {

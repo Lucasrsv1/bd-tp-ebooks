@@ -59,7 +59,7 @@ async function buy (req, res) {
 			return res.status(400).json({ message: "Usuário não identificado." });
 
 		const now = new Date();
-		const date = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDay().toString().padStart(2, "0")}`;
+		const date = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}`;
 
 		const result = await db.execute(`
 			INSERT INTO vendas (id_usuario_comprador, id_ebook, data_compra, preco_pago)
