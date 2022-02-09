@@ -52,7 +52,7 @@ export class AuthenticationService {
 		);
 	}
 
-	public cadatrar (nome: string, email: string, senha: string, blockUI?: NgBlockUI): void {
+	public signUp (nome: string, email: string, senha: string, blockUI?: NgBlockUI): void {
 		senha = sha512(senha);
 
 		this.http.post<{ token: string }>(
@@ -72,6 +72,34 @@ export class AuthenticationService {
 				this.alertsService.httpErrorAlert(
 					"Falha ao Cadastrar",
 					"Não foi possível fazer o cadastro, tente novamente.",
+					error
+				);
+			}
+		);
+	}
+
+	public updateProfile (nome: string, email: string, senha: string | null, blockUI?: NgBlockUI): void {
+		const user: Partial<IUsuario & { senha: string }> = { nome, email };
+		if (senha)
+			user.senha = sha512(senha);
+
+		this.http.put<{ token: string }>(
+			`${environment.API_URL}/v1/usuarios`,
+			user
+		).subscribe(
+			response => {
+				if (blockUI) blockUI.stop();
+
+				this.localStorage.set(LocalStorageKey.USER, response.token);
+				this.router.navigate(["home"]);
+				this.$loggedClient.next(this.getLoggedUser());
+			},
+			(error: HttpErrorResponse) => {
+				if (blockUI) blockUI.stop();
+
+				this.alertsService.httpErrorAlert(
+					"Falha ao Atualizar perfil",
+					"Não foi possível fazer a atualização, tente novamente.",
 					error
 				);
 			}

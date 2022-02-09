@@ -51,7 +51,7 @@ export class CadastroComponent {
 		if (this.blockUI)
 			this.blockUI.start("Cadastrando...");
 
-		this.authenticationService.cadatrar(
+		this.authenticationService.signUp(
 			this.form.get("nome")?.value,
 			this.form.get("email")?.value,
 			this.form.get("senha")?.value,
