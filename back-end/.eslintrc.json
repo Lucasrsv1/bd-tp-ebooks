@@ -97,7 +97,7 @@
 			"warn",
 			"as-needed"
 		],
-		"no-confusing-arrow": "warn",
+		"no-confusing-arrow": "off",
 		"implicit-arrow-linebreak": [
 			"warn",
 			"beside"

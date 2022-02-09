@@ -14,12 +14,25 @@ export class EbooksService {
 		return this.http.get<any>(`${environment.API_URL}/v1/ebooks`, { params: { minReceita } });
 	}
 
-	public create (data: any): Observable<IEbook> {
-		return this.http.post<IEbook>(`${environment.API_URL}/v1/ebooks`, data);
+	public create (data: Partial<IEbook>, image: File | null): Observable<Partial<IEbook>> {
+		const formData = new FormData();
+		for (const key in data) {
+			if (data.hasOwnProperty(key) && key !== "capa")
+				formData.append(key, (data as Record<string, any>)[key].toString());
+		}
+
+		if (image) {
+			const fileName = `${Date.now()}${image.name.substring(image.name.lastIndexOf("."))}`;
+			formData.append("file_name", fileName);
+			formData.append("cover", image, fileName);
+			formData.append("capa", fileName);
+		}
+
+		return this.http.post<Partial<IEbook>>(`${environment.API_URL}/v1/ebooks`, formData);
 	}
 
-	public edit (data: any): Observable<IEbook> {
-		return this.http.put<IEbook>(`${environment.API_URL}/v1/ebooks`, data);
+	public edit (data: Partial<IEbook>): Observable<Partial<IEbook>> {
+		return this.http.put<Partial<IEbook>>(`${environment.API_URL}/v1/ebooks`, data);
 	}
 
 	public remove (idEbook: number): Observable<number> {

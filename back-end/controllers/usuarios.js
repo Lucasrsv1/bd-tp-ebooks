@@ -21,10 +21,9 @@ async function insert (req, res) {
 		const password = sha512(req.body.senha);
 
 		const result = await db.execute(`
-			INSERT INTO usuarios (nome, email, senha, funcionario)
-			VALUES ('${req.body.nome}', '${req.body.email}', '${password}', false)
-			RETURNING id_usuario AS "idUsuario", nome, email, funcionario
-		`);
+			INSERT INTO usuarios (nome, email, senha, funcionario) VALUES ($1, $2, $3, false)
+			RETURNING id_usuario AS "idUsuario", nome, email, funcionario;
+		`, [req.body.nome, req.body.email, password]);
 
 		const token = sign(result.rows[0], KEY_TOKEN, { expiresIn: EXPIRATION_TIME });
 		res.status(200).json({ token });
@@ -70,7 +69,7 @@ async function update (req, res) {
 		const result = await db.execute(`
 			UPDATE usuarios SET ${setUser.join(", ")}
 			WHERE id_usuario = ${res.locals.user.idUsuario}
-			RETURNING id_usuario AS "idUsuario", nome, email, funcionario
+			RETURNING id_usuario AS "idUsuario", nome, email, funcionario;
 		`);
 
 		if (result.rowCount > 0) {

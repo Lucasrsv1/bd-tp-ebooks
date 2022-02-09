@@ -14,7 +14,7 @@ async function getAll (req, res) {
 			SELECT A.id_autor AS "idAutor", A.nome, E.titulo
 			FROM autores A
 			LEFT OUTER JOIN ebooks E ON E.id_autor = A.id_autor
-			ORDER BY E.titulo ASC
+			ORDER BY E.titulo ASC;
 		`);
 
 		const map = {};
@@ -35,6 +35,7 @@ async function getAll (req, res) {
 		for (const idAutor in map)
 			autores.push(map[idAutor]);
 
+		autores.sort((a, b) => a.nome < b.nome ? -1 : (a.nome > b.nome ? 1 : 0));
 		res.status(200).json(autores);
 	} catch (error) {
 		console.error(error);
@@ -52,9 +53,9 @@ async function insert (req, res) {
 	try {
 		const result = await db.execute(`
 			INSERT INTO autores (nome)
-			VALUES ('${req.body.nome}')
-			RETURNING id_autor AS "idAutor", nome
-		`);
+			VALUES ($1)
+			RETURNING id_autor AS "idAutor", nome;
+		`, [req.body.nome]);
 
 		res.status(201).json(result.rows[0]);
 	} catch (error) {
@@ -77,10 +78,10 @@ async function update (req, res) {
 
 	try {
 		const result = await db.execute(`
-			UPDATE autores SET nome = '${req.body.nome}'
-			WHERE id_autor = ${req.body.idAutor}
-			RETURNING id_autor AS "idAutor", nome
-		`);
+			UPDATE autores SET nome = $1
+			WHERE id_autor = $2
+			RETURNING id_autor AS "idAutor", nome;
+		`, [req.body.nome, req.body.idAutor]);
 
 		if (result.rowCount > 0)
 			res.status(200).json(result.rows[0]);
@@ -108,8 +109,8 @@ async function remove (req, res) {
 	try {
 		const result = await db.execute(`
 			DELETE FROM autores
-			WHERE id_autor = ${req.params.idAutor}
-		`);
+			WHERE id_autor = $1;
+		`, [req.params.idAutor]);
 
 		if (result.rowCount > 0)
 			res.status(200).json(result.rowCount);

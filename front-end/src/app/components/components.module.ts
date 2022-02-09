@@ -8,16 +8,18 @@ import { CollapseModule } from "ngx-bootstrap/collapse";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
 import { EbookComponent } from "./ebook/ebook.component";
+import { FileUploadComponent } from "./file-upload/file-upload.component";
 import { FooterComponent } from "./footer/footer.component";
 import { HeaderComponent } from "./header/header.component";
 import { VisualValidatorComponent } from "./visual-validator/visual-validator.component";
 
 @NgModule({
 	declarations: [
-		HeaderComponent,
+		EbookComponent,
+		FileUploadComponent,
 		FooterComponent,
-		VisualValidatorComponent,
-		EbookComponent
+		HeaderComponent,
+		VisualValidatorComponent
 	],
 	imports: [
 		BrowserModule,
@@ -28,10 +30,11 @@ import { VisualValidatorComponent } from "./visual-validator/visual-validator.co
 		FontAwesomeModule
 	],
 	exports: [
-		HeaderComponent,
+		EbookComponent,
+		FileUploadComponent,
 		FooterComponent,
-		VisualValidatorComponent,
-		EbookComponent
+		HeaderComponent,
+		VisualValidatorComponent
 	]
 })
 export class ComponentsModule { }

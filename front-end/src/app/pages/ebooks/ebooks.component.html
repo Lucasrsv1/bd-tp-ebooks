@@ -172,12 +172,23 @@
 						<label for="sinopse">Sinopse:</label>
 						<app-visual-validator [config]="validations" field="sinopse">
 							<textarea
+								rows="3"
 								id="sinopse"
 								class="form-control"
 								formControlName="sinopse"
 								placeholder="Digite a sinopse do eBook"
 							></textarea>
 						</app-visual-validator>
+					</div>
+				</div>
+
+				<div class="form-row" *ngIf="!editando">
+					<div class="form-group col-12 w-100">
+						<label class="mb-1">Imagem (png, jpg ou jpeg):</label>
+						<app-file-upload
+							formControlName="image"
+							[invalid]="form.controls.image.invalid"
+						></app-file-upload>
 					</div>
 				</div>
 			</div>

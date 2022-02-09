@@ -8,6 +8,7 @@ const cors = require("cors");
 const express = require("express");
 const logger = require("morgan");
 const path = require("path");
+const fileUpload = require("express-fileupload");
 const { closeConnection } = require("./database");
 
 const routes = require("./routes");
@@ -19,6 +20,7 @@ app.set("port", port);
 app.use(logger("[:date[clf]] :method :url :status :response-time ms - :res[content-length]"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(fileUpload());
 app.use(cors({
 	origin: "*",
 	methods: "GET,HEAD,PUT,PATCH,POST,DELETE",

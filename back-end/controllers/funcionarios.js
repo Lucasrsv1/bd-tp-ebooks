@@ -14,7 +14,7 @@ async function getAll (req, res) {
 		const result = await db.findAll(`
 			SELECT id_usuario AS "idFuncionario", nome, email
 			FROM usuarios
-			WHERE funcionario = true
+			WHERE funcionario = true;
 		`);
 
 		res.status(200).json(result);
@@ -36,10 +36,9 @@ async function insert (req, res) {
 		const password = sha512(req.body.senha);
 
 		const result = await db.execute(`
-			INSERT INTO usuarios (nome, email, senha, funcionario)
-			VALUES ('${req.body.nome}', '${req.body.email}', '${password}', true)
-			RETURNING id_usuario AS "idFuncionario", nome, email
-		`);
+			INSERT INTO usuarios (nome, email, senha, funcionario) VALUES ($1, $2, $3, true)
+			RETURNING id_usuario AS "idFuncionario", nome, email;
+		`, [req.body.nome, req.body.email, password]);
 
 		res.status(201).json(result.rows[0]);
 	} catch (error) {
@@ -64,10 +63,10 @@ async function update (req, res) {
 
 	try {
 		const result = await db.execute(`
-			UPDATE usuarios SET nome = '${req.body.nome}', email = '${req.body.email}'
-			WHERE id_usuario = ${req.body.idFuncionario}
-			RETURNING id_usuario AS "idFuncionario", nome, email
-		`);
+			UPDATE usuarios SET nome = $1, email = $2
+			WHERE id_usuario = $3
+			RETURNING id_usuario AS "idFuncionario", nome, email;
+		`, [req.body.nome, req.body.email, req.body.idFuncionario]);
 
 		if (result.rowCount > 0)
 			res.status(200).json(result.rows[0]);
@@ -95,8 +94,8 @@ async function remove (req, res) {
 	try {
 		const result = await db.execute(`
 			DELETE FROM usuarios
-			WHERE id_usuario = ${req.params.idFuncionario}
-		`);
+			WHERE id_usuario = $1;
+		`, [req.params.idFuncionario]);
 
 		if (result.rowCount > 0)
 			res.status(200).json(result.rowCount);

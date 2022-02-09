@@ -37,8 +37,8 @@ async function getMyPurchases (req, res) {
 			SELECT V.id_venda AS "idVenda", V.data_compra AS "dataCompra", E.titulo AS "ebookTitulo", V.preco_pago AS "precoPago"
 			FROM vendas V
 			INNER JOIN ebooks E ON E.id_ebook = V.id_ebook
-			WHERE V.id_usuario_comprador = ${res.locals.user.idUsuario}
-		`);
+			WHERE V.id_usuario_comprador = $1;
+		`, [res.locals.user.idUsuario]);
 
 		res.status(200).json(result);
 	} catch (error) {
@@ -63,8 +63,8 @@ async function buy (req, res) {
 
 		const result = await db.execute(`
 			INSERT INTO vendas (id_usuario_comprador, id_ebook, data_compra, preco_pago)
-				VALUES (${res.locals.user.idUsuario}, ${req.body.idEbook}, '${date}', ${req.body.preco});
-		`);
+				VALUES ($1, $2, $3, $4);
+		`, [res.locals.user.idUsuario, req.body.idEbook, date, req.body.preco]);
 
 		res.status(200).json(result.rowCount > 0);
 	} catch (error) {

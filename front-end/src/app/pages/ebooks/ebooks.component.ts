@@ -17,6 +17,7 @@ import { IAutor } from "src/app/interfaces/autor";
 import { IEbook } from "src/app/interfaces/ebook";
 import { IGenero } from "src/app/interfaces/genero";
 import { IValidations } from "src/app/components/visual-validator/visual-validator.component";
+import { requiredFileType } from "src/app/components/file-upload/file-upload.component";
 
 import { EbooksService } from "src/app/services/ebooks/ebooks.service";
 import { GenresService } from "src/app/services/genres/genres.service";
@@ -87,7 +88,8 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 			preco: [null, [Validators.required, Validators.min(0.01)]],
 			sinopse: [""],
 			genero: [null, Validators.required],
-			autor: [null, Validators.required]
+			autor: [null, Validators.required],
+			image: [null, requiredFileType(["png", "jpg", "jpeg"], false)]
 		});
 
 		this.validations = {
@@ -229,15 +231,14 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 		}
 
 		this.blockUI?.start("Salvando ebook...");
-		let ebook$: Observable<IEbook>;
+		let ebook$: Observable<Partial<IEbook>>;
 
-		const data: any = {
+		const data: Partial<IEbook> = {
 			titulo: this.form.get("titulo")?.value,
 			anoPublicacao: this.form.get("anoPublicacao")?.value,
 			numPaginas: this.form.get("numPaginas")?.value,
 			preco: this.form.get("preco")?.value,
 			sinopse: this.form.get("sinopse")?.value,
-			capa: null,
 			idGenero: this.form.get("genero")?.value,
 			idAutor: this.form.get("autor")?.value
 		};
@@ -246,7 +247,7 @@ export class EbooksComponent implements OnInit, OnDestroy, AfterViewInit {
 			data.idEbook = this.editando.idEbook;
 			ebook$ = this.ebooksService.edit(data);
 		} else {
-			ebook$ = this.ebooksService.create(data);
+			ebook$ = this.ebooksService.create(data, this.form.get("image")?.value);
 		}
 
 		ebook$

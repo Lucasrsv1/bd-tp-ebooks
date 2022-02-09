@@ -64,8 +64,8 @@ async function login (req, res) {
 		const user = await db.findOne(`
 			SELECT id_usuario AS "idUsuario", nome, email, funcionario
 			FROM usuarios
-			WHERE email = '${req.body.email}' AND senha = '${password}'
-		`);
+			WHERE email = $1 AND senha = $2;
+		`, [req.body.email, password]);
 
 		if (!user)
 			return res.status(403).json({ message: "E-mail ou senha incorretos." });

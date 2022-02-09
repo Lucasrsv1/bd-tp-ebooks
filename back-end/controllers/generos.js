@@ -14,7 +14,8 @@ async function getAll (req, res) {
 			SELECT G.id_genero AS "idGenero", G.nome, COUNT(E.id_ebook) AS "qtdEbooks"
 			FROM generos G
 			LEFT OUTER JOIN ebooks E ON E.id_genero = G.id_genero
-			GROUP BY G.id_genero;
+			GROUP BY G.id_genero
+			ORDER BY G.nome ASC;
 		`);
 
 		res.status(200).json(result);
@@ -33,10 +34,9 @@ async function insert (req, res) {
 
 	try {
 		const result = await db.execute(`
-			INSERT INTO generos (nome)
-			VALUES ('${req.body.nome}')
-			RETURNING id_genero AS "idGenero", nome
-		`);
+			INSERT INTO generos (nome) VALUES ($1)
+			RETURNING id_genero AS "idGenero", nome;
+		`, [req.body.nome]);
 
 		res.status(201).json(result.rows[0]);
 	} catch (error) {
@@ -59,10 +59,10 @@ async function update (req, res) {
 
 	try {
 		const result = await db.execute(`
-			UPDATE generos SET nome = '${req.body.nome}'
-			WHERE id_genero = ${req.body.idGenero}
-			RETURNING id_genero AS "idGenero", nome
-		`);
+			UPDATE generos SET nome = $1
+			WHERE id_genero = $2
+			RETURNING id_genero AS "idGenero", nome;
+		`, [req.body.nome, req.body.idGenero]);
 
 		if (result.rowCount > 0)
 			res.status(200).json(result.rows[0]);
@@ -90,8 +90,8 @@ async function remove (req, res) {
 	try {
 		const result = await db.execute(`
 			DELETE FROM generos
-			WHERE id_genero = ${req.params.idGenero}
-		`);
+			WHERE id_genero = $1;
+		`, [req.params.idGenero]);
 
 		if (result.rowCount > 0)
 			res.status(200).json(result.rowCount);

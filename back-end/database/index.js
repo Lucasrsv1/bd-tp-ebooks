@@ -13,25 +13,28 @@ pool.query("SELECT NOW() AS now", (err, res) => {
 
 /**
  * @param {import("pg").QueryConfig} query
+ * @param {any[]} values
  */
-async function findOne (query) {
-	const res = await pool.query(query);
+async function findOne (query, values) {
+	const res = await pool.query(query, values || []);
 	return res.rows[0];
 }
 
 /**
  * @param {import("pg").QueryConfig} query
+ * @param {any[]} values
  */
-async function findAll (query) {
-	const res = await pool.query(query);
+async function findAll (query, values) {
+	const res = await pool.query(query, values || []);
 	return res.rows;
 }
 
 /**
  * @param {import("pg").QueryConfig} query
+ * @param {any[]} values
  */
-function execute (query) {
-	return pool.query(query);
+function execute (query, values) {
+	return pool.query(query, values || []);
 }
 
 function closeConnection () {
