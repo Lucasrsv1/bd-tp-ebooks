@@ -19,9 +19,9 @@
 					<tr *ngFor="let sale of sales">
 						<td>{{ sale.idVenda }}</td>
 						<td>{{ sale.ebookTitulo }}</td>
-						<td>{{ sale.precoPago }}</td>
+						<td>R$ {{ sale.precoPago | number: "1.2-2" }}</td>
 						<td>{{ sale.nomeComprador }}</td>
-						<td>{{ sale.dataCompra | date: "dd/MM/yyyy '-' HH:mm" }}</td>
+						<td>{{ sale.dataCompra | date: "dd/MM/yyyy" }}</td>
 					</tr>
 				</tbody>
 			</table>

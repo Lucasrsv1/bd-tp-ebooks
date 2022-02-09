@@ -1,4 +1,8 @@
+const { body } = require("express-validator");
+
 const db = require("../database");
+const { ensureAuthorized } = require("./login");
+const { isRequestInvalid } = require("../utils/http-validation");
 
 /**
  * @param {import("express").Request} req
@@ -43,4 +47,36 @@ async function getMyPurchases (req, res) {
 	}
 }
 
-module.exports = { getAll, getMyPurchases };
+/**
+ * @param {import("express").Request} req
+ * @param {import("express").Response} res
+ */
+async function buy (req, res) {
+	if (isRequestInvalid(req, res)) return;
+
+	try {
+		if (!res.locals.user || !res.locals.user.idUsuario)
+			return res.status(400).json({ message: "Usuário não identificado." });
+
+		const now = new Date();
+		const date = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, "0")}-${now.getDay().toString().padStart(2, "0")}`;
+
+		const result = await db.execute(`
+			INSERT INTO vendas (id_usuario_comprador, id_ebook, data_compra, preco_pago)
+				VALUES (${res.locals.user.idUsuario}, ${req.body.idEbook}, '${date}', ${req.body.preco});
+		`);
+
+		res.status(200).json(result.rowCount > 0);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: error.message, error });
+	}
+}
+
+buy.validations = [
+	ensureAuthorized,
+	body("idEbook").isNumeric().withMessage("A ID do eBook é inválida.").toInt(),
+	body("preco").isNumeric().withMessage("O preço do eBook é inválido.").toFloat()
+];
+
+module.exports = { getAll, getMyPurchases, buy };

@@ -1,16 +1,16 @@
 const { Router } = require("express");
 
-const generosController = require("../../controllers/generos");
+const { getAll, insert, remove, update } = require("../../controllers/generos");
 const { ensureAuthorized } = require("../../controllers/login");
 
 const router = Router();
 
-router.get("/", ensureAuthorized, generosController.getAll);
+router.get("/", ensureAuthorized, getAll);
 
-router.post("/", generosController.insert.validations, generosController.insert);
+router.post("/", insert.validations, insert);
 
-router.put("/", generosController.update.validations, generosController.update);
+router.put("/", update.validations, update);
 
-router.delete("/:idGenero", generosController.remove.validations, generosController.remove);
+router.delete("/:idGenero", remove.validations, remove);
 
 module.exports = router;

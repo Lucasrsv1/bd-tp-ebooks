@@ -1,16 +1,16 @@
 const { Router } = require("express");
 
-const autoresController = require("../../controllers/autores");
+const { getAll, insert, remove, update } = require("../../controllers/autores");
 const { ensureAuthorizedEmployee } = require("../../controllers/login");
 
 const router = Router();
 
-router.get("/", ensureAuthorizedEmployee, autoresController.getAll);
+router.get("/", ensureAuthorizedEmployee, getAll);
 
-router.post("/", autoresController.insert.validations, autoresController.insert);
+router.post("/", insert.validations, insert);
 
-router.put("/", autoresController.update.validations, autoresController.update);
+router.put("/", update.validations, update);
 
-router.delete("/:idAutor", autoresController.remove.validations, autoresController.remove);
+router.delete("/:idAutor", remove.validations, remove);
 
 module.exports = router;

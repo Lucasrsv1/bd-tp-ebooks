@@ -47,11 +47,11 @@
 						<td>{{ ebook.titulo }}</td>
 						<td>{{ ebook.genero }}</td>
 						<td>{{ ebook.autor }}</td>
-						<td>R$ {{ ebook.preco | number:"1.2-2" }}</td>
+						<td>R$ {{ ebook.preco | number: "1.2-2" }}</td>
 						<td>{{ ebook.anoPublicacao }}</td>
 						<td>{{ ebook.numPaginas }}</td>
 						<td>{{ ebook.qtdCompradores }}</td>
-						<td>R$ {{ (ebook.receita || 0) | number:"1.2-2" }}</td>
+						<td>R$ {{ (ebook.receita || 0) | number: "1.2-2" }}</td>
 						<td>{{ ebook.downloads }}</td>
 						<td class="text-center">
 							<button class="btn btn-sm btn-primary" (click)="showSynopsis(ebook)" [disabled]="!ebook.sinopse" title="Ver sinopse do eBook">

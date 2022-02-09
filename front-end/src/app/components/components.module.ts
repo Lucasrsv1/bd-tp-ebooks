@@ -7,6 +7,7 @@ import { BlockUIModule } from "ng-block-ui";
 import { CollapseModule } from "ngx-bootstrap/collapse";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 
+import { EbookComponent } from "./ebook/ebook.component";
 import { FooterComponent } from "./footer/footer.component";
 import { HeaderComponent } from "./header/header.component";
 import { VisualValidatorComponent } from "./visual-validator/visual-validator.component";
@@ -15,7 +16,8 @@ import { VisualValidatorComponent } from "./visual-validator/visual-validator.co
 	declarations: [
 		HeaderComponent,
 		FooterComponent,
-		VisualValidatorComponent
+		VisualValidatorComponent,
+		EbookComponent
 	],
 	imports: [
 		BrowserModule,
@@ -28,7 +30,8 @@ import { VisualValidatorComponent } from "./visual-validator/visual-validator.co
 	exports: [
 		HeaderComponent,
 		FooterComponent,
-		VisualValidatorComponent
+		VisualValidatorComponent,
+		EbookComponent
 	]
 })
 export class ComponentsModule { }

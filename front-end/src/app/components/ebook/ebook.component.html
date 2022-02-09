@@ -1,0 +1,33 @@
+<div class="card p-3 mb-3">
+	<div class="d-flex flex-column flex-sm-row align-items-center">
+		<div class="mr-4">
+			<img *ngIf="ebook.capa" [src]="getPhotoURL(ebook.capa)" class="img-fluid rounded-start">
+			<img *ngIf="!ebook.capa" src="assets/no-image.jpg" class="img-fluid rounded-start">
+		</div>
+
+		<div class="card-body p-0 mt-2 mt-sm-0">
+			<h2 class="card-title mb-1">{{ ebook.titulo }}</h2>
+			<p class="card-text">{{ ebook.autor }}</p>
+
+			<p class="card-text">
+				Preço: R$ {{ ebook.preco | number: "1.2-2" }}
+			</p>
+
+			<p class="card-text">
+				{{ ebook.genero }}, {{ ebook.anoPublicacao }}. {{ ebook.numPaginas }} páginas.
+			</p>
+
+			<p class="card-text text-justify">
+				<small class="text-muted">
+					{{ ebook.sinopse || "Sem sinopse." }}
+				</small>
+			</p>
+
+			<div class="row">
+				<div class="col text-center text-sm-right">
+					<ng-content></ng-content>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
